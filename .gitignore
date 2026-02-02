@@ -8,6 +8,9 @@ token.json
 # OS files
 .DS_Store
 
+# Local Claude instructions (maintainer-only)
+.claude/
+
 # TypeScript build output
 dist/
 *.js
