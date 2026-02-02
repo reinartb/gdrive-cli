@@ -2,14 +2,19 @@
 /**
  * Google Drive CLI
  *
- * Commands:
- *   list <folder-path-or-id>     List files in a folder
- *   read <doc-id>                Read a Google Doc as text
- *   search <query> [--docs-only] Search for files
- *   create <title> [options]     Create a new Google Doc
- *   sheets-read <id> [range]     Read data from a Google Sheet
- *   sheets-write <id> <range> <json>  Write data to a Google Sheet
- *   sheets-append <id> <range> <json> Append rows to a Google Sheet
+ * Commands are namespaced by resource type:
+ *   folders-list                 List files in a folder
+ *   files-search                 Search for files
+ *   files-rename                 Rename a file
+ *   files-delete                 Delete a file
+ *   files-comments               List/reply/resolve comments
+ *   docs-read                    Read a Google Doc as text
+ *   docs-create                  Create a new Google Doc
+ *   docs-update                  Update a Google Doc
+ *   docs-revisions               List/diff revisions
+ *   sheets-read                  Read data from a Google Sheet
+ *   sheets-write                 Write data to a Google Sheet
+ *   sheets-append                Append rows to a Google Sheet
  *
  * Setup:
  *   1. Download OAuth credentials.json from Google Cloud Console
@@ -17,10 +22,9 @@
  *   3. Run any command - browser will open for consent
  *
  * Examples:
- *   npx tsx src/cli.ts list "/"
- *   npx tsx src/cli.ts read "1abc123..."
- *   npx tsx src/cli.ts sheets-read "1abc..." "Sheet1!A1:D10"
- *   npx tsx src/cli.ts sheets-append "1abc..." "A:C" '[["Jane",25]]'
+ *   npx tsx src/cli.ts folders-list "<folder-id>"
+ *   npx tsx src/cli.ts docs-read "1abc123..."
+ *   npx tsx src/cli.ts sheets-read "1abc..." "Sheet1"
  */
 
 import * as list from './list.js';
@@ -36,15 +40,22 @@ import * as sheetsRead from './sheets-read.js';
 import * as sheetsWrite from './sheets-write.js';
 
 const commands: Record<string, { main: (args: string[]) => Promise<void>; description: string }> = {
-  list: { main: list.main, description: 'List files in a folder' },
-  read: { main: read.main, description: 'Read a Google Doc as text' },
-  search: { main: search.main, description: 'Search for files' },
-  create: { main: create.main, description: 'Create a new Google Doc' },
-  update: { main: update.main, description: 'Update a Google Doc content' },
-  rename: { main: rename.main, description: 'Rename a file' },
-  revisions: { main: revisions.main, description: 'List/diff Google Doc revisions' },
-  comments: { main: comments.main, description: 'List comments on a file' },
-  delete: { main: deleteCmd.main, description: 'Delete a file by ID' },
+  // Folders
+  'folders-list': { main: list.main, description: 'List files in a folder' },
+
+  // Files (general operations)
+  'files-search': { main: search.main, description: 'Search for files' },
+  'files-rename': { main: rename.main, description: 'Rename a file' },
+  'files-delete': { main: deleteCmd.main, description: 'Delete a file by ID' },
+  'files-comments': { main: comments.main, description: 'List/reply/resolve comments' },
+
+  // Docs
+  'docs-read': { main: read.main, description: 'Read a Google Doc as text' },
+  'docs-create': { main: create.main, description: 'Create a new Google Doc' },
+  'docs-update': { main: update.main, description: 'Update a Google Doc content' },
+  'docs-revisions': { main: revisions.main, description: 'List/diff Google Doc revisions' },
+
+  // Sheets
   'sheets-read': { main: sheetsRead.main, description: 'Read data from a Google Sheet' },
   'sheets-write': { main: sheetsWrite.main, description: 'Write data to a Google Sheet' },
   'sheets-append': { main: sheetsWrite.appendMain, description: 'Append rows to a Google Sheet' },
@@ -57,7 +68,7 @@ function showHelp() {
   console.log('');
   console.log('Commands:');
   for (const [name, cmd] of Object.entries(commands)) {
-    console.log(`  ${name.padEnd(10)} ${cmd.description}`);
+    console.log(`  ${name.padEnd(16)} ${cmd.description}`);
   }
   console.log('');
   console.log('Setup:');
@@ -66,11 +77,10 @@ function showHelp() {
   console.log('  2. Run: npm install (in this directory)');
   console.log('');
   console.log('Examples:');
-  console.log('  npx tsx src/cli.ts list "/"');
-  console.log('  npx tsx src/cli.ts list "/Key For Her/Ads/Scripts"');
-  console.log('  npx tsx src/cli.ts read "1abc123..."');
-  console.log('  npx tsx src/cli.ts search "ad script" --docs-only');
-  console.log('  npx tsx src/cli.ts create "New Brief" --folder "/Ads/Briefs"');
+  console.log('  npx tsx src/cli.ts folders-list "<folder-id>"');
+  console.log('  npx tsx src/cli.ts docs-read "1abc123..."');
+  console.log('  npx tsx src/cli.ts files-search "report" --docs-only');
+  console.log('  npx tsx src/cli.ts docs-create "New Doc" --folder "<folder-id>"');
 }
 
 async function main() {

@@ -39,7 +39,7 @@ npm install
 Run any command and a browser will open for OAuth consent:
 
 ```bash
-npx tsx src/cli.ts list "<folder-id>"
+npx tsx src/cli.ts folders-list "<folder-id>"
 ```
 
 This creates a `token.json` file (automatically gitignored).
@@ -52,17 +52,23 @@ npx tsx src/cli.ts <command> [args]
 
 ### Commands
 
+Commands are namespaced by resource type:
+
 | Command | Description |
 |---------|-------------|
-| `list <folder-id>` | List files in a folder |
-| `read <doc-id>` | Read a Google Doc as text |
-| `search <query>` | Search for files by name |
-| `create <title> --folder <id> --content <text>` | Create a new doc |
-| `update <doc-id> --content <text>` | Update a doc's content |
-| `rename <file-id> <new-name>` | Rename a file |
-| `delete <file-id>` | Delete a file |
-| `revisions <doc-id>` | List revision history |
-| `comments <file-id>` | List comments |
+| **Folders** | |
+| `folders-list <folder-id>` | List files in a folder |
+| **Files** | |
+| `files-search <query>` | Search for files by name |
+| `files-rename <file-id> <new-name>` | Rename a file |
+| `files-delete <file-id>` | Delete a file |
+| `files-comments <file-id>` | List/reply/resolve comments |
+| **Docs** | |
+| `docs-read <doc-id>` | Read a Google Doc as text |
+| `docs-create <title> --folder <id>` | Create a new doc |
+| `docs-update <doc-id> --content <text>` | Update a doc's content |
+| `docs-revisions <doc-id>` | List revision history |
+| **Sheets** | |
 | `sheets-read <sheet-id> [tab]` | Read from a sheet |
 | `sheets-write <sheet-id> <range> <json>` | Write to a sheet |
 | `sheets-append <sheet-id> <tab> <json>` | Append rows to a sheet |
@@ -71,13 +77,13 @@ npx tsx src/cli.ts <command> [args]
 
 ```bash
 # Read a Google Doc
-npx tsx src/cli.ts read "1abc123..."
+npx tsx src/cli.ts docs-read "1abc123..."
 
 # Create a doc with markdown formatting
-npx tsx src/cli.ts create "My Doc" --folder "folder-id" --content "# Hello" --markdown
+npx tsx src/cli.ts docs-create "My Doc" --folder "folder-id" --content "# Hello" --markdown
 
 # Search for docs
-npx tsx src/cli.ts search "quarterly report" --docs-only
+npx tsx src/cli.ts files-search "quarterly report" --docs-only
 
 # Read a specific sheet tab
 npx tsx src/cli.ts sheets-read "sheet-id" "Sheet1"
@@ -86,10 +92,10 @@ npx tsx src/cli.ts sheets-read "sheet-id" "Sheet1"
 npx tsx src/cli.ts sheets-append "sheet-id" "Sheet1" '[["Name","Value"],["Test",123]]'
 
 # Compare two revisions
-npx tsx src/cli.ts revisions "doc-id" --diff 5 10
+npx tsx src/cli.ts docs-revisions "doc-id" --diff 5 10
 
 # Reply to a comment (use stdin to avoid shell escaping issues)
-echo "Thanks for the feedback!" | npx tsx src/cli.ts comments "doc-id" --reply "comment-id" --stdin
+echo "Thanks for the feedback!" | npx tsx src/cli.ts files-comments "doc-id" --reply "comment-id" --stdin
 ```
 
 ## For Claude Code Users
