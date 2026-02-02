@@ -9,7 +9,7 @@ token.json
 .DS_Store
 
 # Local Claude instructions (maintainer-only)
-.claude/
+CLAUDE.local.md
 
 # TypeScript build output
 dist/
