@@ -1,0 +1,30 @@
+{
+  "name": "gdrive-cli",
+  "version": "1.0.0",
+  "description": "CLI tool for Google Drive, Docs, and Sheets - read, create, update, and manage documents programmatically",
+  "type": "module",
+  "scripts": {
+    "cli": "tsx src/cli.ts"
+  },
+  "bin": {
+    "gdrive": "./src/cli.ts"
+  },
+  "keywords": [
+    "google-drive",
+    "google-docs",
+    "google-sheets",
+    "cli",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "^144.0.0",
+    "google-auth-library": "^9.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

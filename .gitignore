@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# OAuth credentials (DO NOT COMMIT)
+credentials.json
+token.json
+
+# OS files
+.DS_Store
+
+# TypeScript build output
+dist/
+*.js
+*.js.map
+*.d.ts
+
+# Keep source TypeScript files
+!src/**/*.ts
